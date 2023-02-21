@@ -33,34 +33,6 @@ service / on new http:Listener(9090) {
         return response;
     }
 
-    resource function post items(@http:Payload ItemRequest item) returns Item|error {
-        Item it = {name: item.name, id: item.name, price: item.price, isFollowing: false};
-        catelog.add(it);
-        return it;
-    }
-
-    resource function put item/[string id](@http:Payload ItemRequest item) returns Item|error {
-        foreach var it in catelog {
-            if (it.id == id) {
-                _ = catelog.remove(it.id);
-                Item updatedItem = {name: item.name, id: item.name, price: item.price, isFollowing: false};
-                catelog.add(updatedItem);
-                return updatedItem;
-            }
-        }
-        return error("Item not found");
-    }
-
-    resource function delete item/[string id]() returns Item|error {
-        foreach var item in catelog {
-            if (item.id == id) {
-                Item removedItem = catelog.remove(item.id);
-                return removedItem;
-            }
-        }
-        return error("Item not found");
-    }
-
     resource function post item/[string id]/follow() returns Item|error {
 
         foreach var item in catelog {
